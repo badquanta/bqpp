@@ -22,6 +22,7 @@
       "inherits": "Release",
       "cacheVariables": {
         "BQPP_BUILD": "OFF",
+        "BQPP_TESTS": "OFF",
         "BQPP_DOCS": "ON"
       }
     },
@@ -31,7 +32,10 @@
       "description": "Build with debug information",
       "inherits": "Release",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
+        "CMAKE_BUILD_TYPE": "Debug",
+        "BQPP_BUILD": "ON",
+        "BQPP_TESTS": "OFF",
+        "BQPP_DOCS": "OFF"
       }
     },
     {
@@ -40,6 +44,7 @@
       "description": "Build with unit tests enabled",
       "inherits": "Debug",
       "cacheVariables": {
+        "BQPP_BUILD": "ON",
         "BQPP_TESTS": "ON"
       }
     }

@@ -3,6 +3,7 @@ project(bqpp)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 message("${PROJECT_NAME} requires C++${CMAKE_CXX_STANDARD}")
+#########################################
 # CMP0076: This policy determines how CMake handles target sources when using the `target_sources()` command.
 # When this policy is set to NEW, CMake allows `target_sources()` to add sources to targets that are not yet defined.
 # When this policy is set to OLD, `target_sources()` requires the target to be defined before adding sources to it.
