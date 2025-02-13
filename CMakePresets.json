@@ -1,0 +1,47 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 23,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "Release",
+      "hidden": false,
+      "description": "Build with release optimization",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "DocumentationOnly",
+      "hidden": false,
+      "description": "Generate documentation only",
+      "inherits": "Release",
+      "cacheVariables": {
+        "BQPP_BUILD": "OFF",
+        "BQPP_DOCS": "ON"
+      }
+    },
+    {
+      "name": "Debug",
+      "hidden": false,
+      "description": "Build with debug information",
+      "inherits": "Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "UnitTests",
+      "hidden": false,
+      "description": "Build with unit tests enabled",
+      "inherits": "Debug",
+      "cacheVariables": {
+        "BQPP_TESTS": "ON"
+      }
+    }
+  ]
+}
