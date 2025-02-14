@@ -25,45 +25,44 @@
 namespace bq
 {
 /**
- * @brief base class for helper classes that wrap shared pointers to SDL
- * structures.
- * @note SharedResource does __not__ use virtual methods.
- * @note default constructor == nullptr reference
- * @note automatically casts to typename T*
- * @note automatically casts to bool,
- * - true == (this.resource.git()!=nullptr);
- * - false == (this.resource.get()==nullptr);
+ * @brief Base template for shared pointer resource wrapper classes.
+ * @details
+ * SharedResource is a base for wrappers around shared pointers to structures.
+ * It provides convenient operators to interact with the underlying resource.
+ *
+ * @tparam T The type of the resource being managed.
+ *
+ * @example testSharedResource.cpp
+ *
  */
 template <typename T> class SharedResource
 {
   public:
-    /** @brief resource shared pointer.  */
+    /** @brief The resource that is monitored by this chaperone class.  */
     std::shared_ptr<T> resource;
-    /** @brief SharedResources act like pointers to that resource. */
+    /** @brief Ensures `SharedResource` acts like `T*` references. */
     operator T *() const
     {
         return resource.get();
     }
-    /** @brief SharedResources act like pointers to that resource. */
+    /** @brief Ensures `SharedResource` acts like `T*` references. */
     T *operator->() const
     {
         return resource.get();
     }
-    /** @brief SharedResources can be compared to nullptr. */
+    /** @brief Ensures `SharedResource` acts like `T*` references. */
     bool operator==(const nullptr_t) const
     {
         return resource == nullptr;
     }
-    /** @brief SharedResources act as a boolean in if statements */
+    /** @brief Ensures `SharedResource` acts like `T*` references. */
     operator bool() const
     {
         return resource != nullptr;
     }
-    // using std::shared_ptr<T>::shared_ptr;
-    /** @brief deleter_callback_t a function pointer type for deleting the
-     * resource. */
+    /** @brief deleter_callback_t defines interface for deleter */
     typedef void (*deleter_callback_t)(T *);
-    /** @brief Requires that a deleter be specified */
+    /** @brief Simply enforces requirement for deleter */
     SharedResource(T *t, deleter_callback_t d) : resource(t, d)
     {
     }
@@ -77,8 +76,10 @@ template <typename T> class SharedResource
     {
     }
     /** @brief No-op (do nothing) deleter. Useful for non-managing instances
-     * where going out of scope should not deallocate. */
-    static void null_deleter(T *t)
+     * where going out of scope should not deallocate.
+     * @param ignored
+     **/
+    static void null_deleter(T *)
     {
         return;
     }
