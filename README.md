@@ -2,12 +2,9 @@
 
 My personal C++ playground.
 
-## status of 0.1.1 & change log
+## status of 0.1.1
 
-Initial project repository start.
-
-* 0.1.1 - template & SharedResource and `bqStd` library added.  
-Currently empty, but may not be for long.
+Initial project repository start. See: [CHANGELOG](./CHANGELOG.md)
 
 ## roadmap
 

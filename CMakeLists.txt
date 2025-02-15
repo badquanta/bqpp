@@ -76,10 +76,10 @@ list(APPEND BQPP_INCLUDE_FILES "")
 ##############################################################################
 # Main Targets
 ##############################################################################
-if(BQPP_BUILD)
-  message("${PROJECT_NAME} src....")
-  add_subdirectory("src")
-endif()
+
+message("${PROJECT_NAME} src....")
+add_subdirectory("src")
+
 
 ##############################################################################
 # Unit Tests
@@ -125,6 +125,7 @@ if(BQPP_DOCS)
   doxygen_add_docs(
     docs
     ${BQPP_DOCS_MAIN_MD}
+    "${CMAKE_SOURCE_DIR}/CHANGELOG.md"
     "${CMAKE_SOURCE_DIR}/bqStd.md"
     "${CMAKE_SOURCE_DIR}/CMake.md"
     "${CMAKE_SOURCE_DIR}/CMakeLists.txt"

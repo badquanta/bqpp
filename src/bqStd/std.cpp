@@ -16,7 +16,10 @@
  * @todo possibly remove this empty stub
  **/
 #include <bq/std.hpp>
+/**
+ * - std.cpp - the implementation of the bq namespace
+ */
 namespace bq
 {
-
+/** @todo implement something in this stub */
 }

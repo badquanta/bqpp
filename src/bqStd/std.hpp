@@ -18,7 +18,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  **/
 #include "./SharedResource.hpp"
-namespace bq::std
+/**
+ * - std.hpp - the interface of the bq namespace.
+ */
+namespace bq
 {
-
+/** added mostly via includes. May add other things that have no good home. */
 }

@@ -60,6 +60,18 @@
       "cacheVariables": {
         "BQPP_CODE_COVERAGE": "ON"
       }
+    },
+    {
+      "name": "EVERYTHING",
+      "hidden": false,
+      "description": "Build with coverage information",
+      "inherits": "UnitTests",
+      "cacheVariables": {
+        "BQPP_CODE_COVERAGE": "ON",
+        "BQPP_DOCS": "ON",
+        "BQPP_TESTS": "ON",
+        "BQPP_BUILD": "ON"
+      }
     }
   ]
 }
