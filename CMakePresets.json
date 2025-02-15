@@ -1,0 +1,77 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 23,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "Release",
+      "hidden": false,
+      "description": "Build with release optimization",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "BQPP_BUILD": "ON",
+        "BQPP_TESTS": "OFF",
+        "BQPP_DOCS": "OFF",
+        "BQPP_CODE_COVERAGE": "OFF"
+      }
+    },
+    {
+      "name": "DocumentationOnly",
+      "hidden": false,
+      "description": "Generate documentation only",
+      "inherits": "Release",
+      "cacheVariables": {
+        "BQPP_BUILD": "OFF",
+        "BQPP_TESTS": "OFF",
+        "BQPP_DOCS": "ON"
+      }
+    },
+    {
+      "name": "Debug",
+      "hidden": false,
+      "description": "Build with debug information",
+      "inherits": "Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "BQPP_BUILD": "ON",
+        "BQPP_TESTS": "OFF",
+        "BQPP_DOCS": "OFF"
+      }
+    },
+    {
+      "name": "UnitTests",
+      "hidden": false,
+      "description": "Build with unit tests enabled",
+      "inherits": "Debug",
+      "cacheVariables": {
+        "BQPP_BUILD": "ON",
+        "BQPP_TESTS": "ON"
+      }
+    },
+    {
+      "name": "Coverage",
+      "hidden": false,
+      "description": "Build with coverage information",
+      "inherits": "UnitTests",
+      "cacheVariables": {
+        "BQPP_CODE_COVERAGE": "ON"
+      }
+    },
+    {
+      "name": "EVERYTHING",
+      "hidden": false,
+      "description": "Build with coverage information",
+      "inherits": "UnitTests",
+      "cacheVariables": {
+        "BQPP_CODE_COVERAGE": "ON",
+        "BQPP_DOCS": "ON",
+        "BQPP_TESTS": "ON",
+        "BQPP_BUILD": "ON"
+      }
+    }
+  ]
+}
