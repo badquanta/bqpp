@@ -21,6 +21,7 @@
 /**
  * - SharedResource.hpp - SharedResource is a base for wrappers around shared
  * pointers to SDL structures.
+ * @ingroup bqStd
  */
 namespace bq
 {
@@ -30,40 +31,40 @@ namespace bq
  * SharedResource is a base for wrappers around shared pointers to structures.
  * It provides convenient operators to interact with the underlying resource.
  *
- * @tparam T The type of the resource being managed.
+ * @tparam ResourceType The type of the resource being managed.
  *
  * @example testSharedResource.cpp
- *
+ * @ingroup bqStd
  */
-template <typename T> class SharedResource
+template <typename ResourceType> class SharedResource
 {
   public:
     /** @brief The resource that is monitored by this chaperone class.  */
-    std::shared_ptr<T> resource;
-    /** @brief Ensures `SharedResource` acts like `T*` references. */
-    operator T *() const
+    std::shared_ptr<ResourceType> resource;
+    /** @brief Ensures `SharedResource` acts like `ResourceType*` references. */
+    operator ResourceType *() const
     {
         return resource.get();
     }
-    /** @brief Ensures `SharedResource` acts like `T*` references. */
-    T *operator->() const
+    /** @brief Ensures `SharedResource` acts like `ResourceType*` references. */
+    ResourceType *operator->() const
     {
         return resource.get();
     }
-    /** @brief Ensures `SharedResource` acts like `T*` references. */
+    /** @brief Ensures `SharedResource` acts like `ResourceType*` references. */
     bool operator==(const nullptr_t) const
     {
         return resource == nullptr;
     }
-    /** @brief Ensures `SharedResource` acts like `T*` references. */
+    /** @brief Ensures `SharedResource` acts like `ResourceType*` references. */
     operator bool() const
     {
         return resource != nullptr;
     }
     /** @brief deleter_callback_t defines interface for deleter */
-    typedef void (*deleter_callback_t)(T *);
+    typedef void (*deleter_callback_t)(ResourceType *);
     /** @brief Simply enforces requirement for deleter */
-    SharedResource(T *t, deleter_callback_t d) : resource(t, d)
+    SharedResource(ResourceType *t, deleter_callback_t d) : resource(t, d)
     {
     }
     /** @brief Explicitly setting the SharedResource to nullptr is allowed */
@@ -79,7 +80,7 @@ template <typename T> class SharedResource
      * where going out of scope should not deallocate.
      * @param ignored
      **/
-    static void null_deleter(T *)
+    static void null_deleter(ResourceType *)
     {
         return;
     }

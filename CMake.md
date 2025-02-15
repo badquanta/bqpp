@@ -1,17 +1,19 @@
 # CMake
 
-This repository uses CMake to configure build systems for this project.
-`CMakePresets.json` provides handy defaults
+`CMakePresets.json` provides some handy defaults:
 
-## Presets
+- Release: build the libraries and executables for distribution (defaults, no debug info)
+- Debug: build with debug information.
+- Coverage: build with debug & coverage information.
+- DocumentationOnly: only build doxygen documentation.
+- UnitTests: build with unit testing enabled.
 
-- Release
-  binaryDir: ```./build```
-  cacheVariables:
-  - CMAKE_BUILD_TYPE: ```"Release"```
-- ```DocumentationOnly```
+## options
 
-## Options
+- BQPP_CODE_COVERAGE: enable code coverage report generation
+- BQPP_TESTS: enable testing
+- BQPP_BUILD: build main targets (src)
+- BQPP_DOCS: generate documentation from repository with doxygen
 
 - `CMakeLists.txt` BQPP_BUILD: __ON__
         Master on/off switch for building any/all of the bqpp source code. Useful if one only wants to build documentation or resources.
@@ -30,19 +32,3 @@ This repository uses CMake to configure build systems for this project.
           Enables/disables Google Unit Tests.
   - BQPP_DEMO_TESTS: __OFF__
           Enable/disables demo tests.
-
-### BUILD_BQ_DUI_SDL_RENDERER: __OFF__
-
-Turns on/off the building of `libbqSdl`
-
-## BUILD_TESTS: __ON__
-
-Requires BUILD_BQPP __ON__. Controls building any tests (unit or integration).
-
-## BUILD_UNIT_TESTS: __ON__
-
-Requires BUILD_TESTS. Controls building of Google Unit Tests. Each set of unit tests may further depend on specific modules being built in order to be enabled.
-
-## BUILD_INTEGRATION_TESTS: __OFF__
-
-Requires BUILD_TESTS. Each integration test may require other build options to be enabled to be built.

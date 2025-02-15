@@ -12,7 +12,11 @@
       "description": "Build with release optimization",
       "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
+        "CMAKE_BUILD_TYPE": "Release",
+        "BQPP_BUILD": "ON",
+        "BQPP_TESTS": "OFF",
+        "BQPP_DOCS": "OFF",
+        "BQPP_CODE_COVERAGE": "OFF"
       }
     },
     {
@@ -46,6 +50,15 @@
       "cacheVariables": {
         "BQPP_BUILD": "ON",
         "BQPP_TESTS": "ON"
+      }
+    },
+    {
+      "name": "Coverage",
+      "hidden": false,
+      "description": "Build with coverage information",
+      "inherits": "UnitTests",
+      "cacheVariables": {
+        "BQPP_CODE_COVERAGE": "ON"
       }
     }
   ]
