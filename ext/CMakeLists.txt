@@ -1,5 +1,6 @@
-# To fix build waring
-set(ARG_DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
+##############################################################################
+# external dependencies
+#############################################################################
 include(FetchContent)
 if(BQPP_SDL)
   ## SDL3

@@ -16,7 +16,8 @@
         "BQPP_BUILD": "ON",
         "BQPP_TESTS": "OFF",
         "BQPP_DOCS": "OFF",
-        "BQPP_CODE_COVERAGE": "OFF"
+        "BQPP_CODE_COVERAGE": "OFF",
+        "BQPP_SDL": "ON"
       }
     },
     {

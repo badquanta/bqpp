@@ -46,6 +46,9 @@ message("${PROJECT_NAME} option BQPP_CODE_COVERAGE: ${BQPP_CODE_COVERAGE}")
 # enable/disable anything that depends on SDL3
 option(BQPP_SDL "Enable SDL3" OFF)
 message("${PROJECT_NAME} option BQPP_SDL: ${BQPP_SDL}")
+# enable/disable building of demos
+option("BQPP_BUILD_DEMOS" "Build demos" OFF)
+message("${PROJECT_NAME} option BQPP_BUILD_DEMOS: ${BQPP_BUILD_DEMOS}")
 # enable/disable unit tests
 option(BQPP_TESTS "Build tests" OFF)
 message("${PROJECT_NAME} option BUILD_TESTS: ${BQPP_TESTS}")
@@ -64,6 +67,7 @@ if(BQPP_CODE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 else()
   message("${PROJECT_NAME} Code coverage disabled")
 endif()
+
 ##############################################################################
 # External Dependencies
 #############################################################################
@@ -71,22 +75,25 @@ if(BQPP_BUILD)
   message("${PROJECT_NAME} external dependencies....")
   add_subdirectory("ext")
 endif()
-list(APPEND BQPP_SOURCE_FILES "")
-list(APPEND BQPP_INCLUDE_FILES "")
+
+
+
 ##############################################################################
 # Main Targets
 ##############################################################################
-
+# Collect ALL include files in this list.
+list(APPEND BQPP_SOURCE_FILES "")
+# Collect ALL source files in this list.
+list(APPEND BQPP_INCLUDE_FILES "")
 message("${PROJECT_NAME} src....")
+#
 add_subdirectory("src")
-
 
 ##############################################################################
 # Unit Tests
 ##############################################################################
 if(BQPP_TESTS)
   enable_testing()
-  set(ARG_DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
   include(FetchContent)
   FetchContent_Declare(
     googletest
