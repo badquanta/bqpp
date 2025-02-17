@@ -108,7 +108,7 @@ namespace bq::sdl
       return Window(SDL_GetGrabbedWindow(), Window::null_deleter);
     }
     /**
-     * @todo document me
+     * @brief Return non-managing reference from an SDL_Event
      * @returns returns non-owning or nullptr reference
      **/
     inline static Window GetFromEvent(const SDL_Event *a_Event)
@@ -116,8 +116,9 @@ namespace bq::sdl
       return Window(SDL_GetWindowFromEvent(a_Event), Window::null_deleter);
     }
     /**
-     * @todo document me
+     * @brief Get a reference to a Window from a Window ID
      * @returns returns non-owning or nullptr reference
+     * @returns nullptr if invalid WindowID
      **/
     inline static Window GetFromID(Uint32 a_ID)
     {
@@ -264,7 +265,7 @@ namespace bq::sdl
     BQ_INLINE_CHECK_THIS_WINDOW_FOR_FLAGS(isTransparent,
                                           SDL_WINDOW_TRANSPARENT);
     /**
-     * @return true if SDL_WINDOW_NOT_FOCUSABLE flat set
+     * @return true if SDL_WINDOW_NOT_FOCUSABLE flag set
      */
     BQ_INLINE_CHECK_THIS_WINDOW_FOR_FLAGS(isNotFocusable,
                                           SDL_WINDOW_NOT_FOCUSABLE);
@@ -277,7 +278,7 @@ namespace bq::sdl
     {
       return !isNotFocusable();
     }
-    /** @brief Get the unique ID
+    /** @brief Get the WindowID value
      * @see https://wiki.libsdl.org/SDL3/SDL_WindowID
      * @see https://wiki.libsdl.org/SDL3/SDL_GetWindowID
      * @returns SDL_WindowID value
@@ -289,7 +290,7 @@ namespace bq::sdl
     /** @brief Get the Surface associated with the Window
      * @note uses SharedResource<SDL_Surface>::null_deleter
      * @todo document me @see https://wiki.libsdl.org/SDL3/SDL_GetWindowSurface
-     * @returns a Surface SharedResource<SDL_Surface>
+     * @returns a non-managed Surface reference
      */
     template <typename TSurface = bq::sdl::Surface>
     inline TSurface getSurface() const
@@ -374,9 +375,8 @@ namespace bq::sdl
     };
 
     /**
-     * @brief Get the renderer associated with the window
-     * @note Reference returned will not destroy the renderer when it goes out
-     * of scope
+     * @brief Get a reference to the associated renderer.
+     * @returns non-managed reference
      */
     template <typename TRenderer = bq::sdl::Renderer>
     inline TRenderer getRenderer() const
@@ -443,13 +443,13 @@ namespace bq::sdl
       return SDL_GetWindowFullscreenMode(*this);
     }
     /** @brief Get the ICC profile associated with the window
-     * @param size a pointer to the size of the ICC profile
+     * @param a_Size a pointer to the a_Size of the ICC profile
      * @see https://wiki.libsdl.org/SDL3/SDL_GetWindowICCProfile
      * @returns a pointer to the ICC profile
      */
-    inline void *getICCProfile(size_t *size) const
+    inline void *getICCProfile(size_t *a_Size) const
     {
-      return SDL_GetWindowICCProfile(*this, size);
+      return SDL_GetWindowICCProfile(*this, a_Size);
     }
     /** @brief Copy the window surface to the operation system window
      *  @see https://wiki.libsdl.org/SDL3/SDL_UpdateWindowSurface
@@ -462,7 +462,7 @@ namespace bq::sdl
     /** @brief Copy areas of the window surface to the operation system window
      * @param a_Rects an array of SDL_Rects to copy
      * @param a_NumRects the number of SDL_Rects to copy
-     *  @see https://wiki.libsdl.org/SDL3/SDL_UpdateWindowSurfaceRects
+     * @see https://wiki.libsdl.org/SDL3/SDL_UpdateWindowSurfaceRects
      * @returns true on success
      */
     inline bool updateSurfaceRects(const SDL_Rect *a_Rects,
@@ -471,13 +471,18 @@ namespace bq::sdl
       return SDL_UpdateWindowSurfaceRects(*this, a_Rects, a_NumRects);
     };
 
+    /** @brief Tell SDL to update the following rectangles
+     * @param a_Rects std::vector of SDL_Rect to update.
+     */
     template <typename Rects = std::vector<SDL_Rect>>
     inline bool updateSurfaceRects(const Rects &a_Rects) const
     {
       return updateSurfaceRects(a_Rects.data(), a_Rects.size());
     };
 
-    /** @todo document me */
+    /** @see https://wiki.libsdl.org/SDL3/SDL_CreatePopupWindow 
+     * @brief create a new window that is a popup window for this. 
+     **/
     inline Window createPopup(int a_OffsetX, int a_OffsetY, int a_Width,
                               int a_Height, Uint32 a_Flags) const
     {
@@ -602,7 +607,7 @@ namespace bq::sdl
      * @brief Get the relative mouse mode of the window
      * @returns true if the window is in relative mouse mode
      * @note perhaps could be renamed to "hasRelativeMouseMode"
-     */
+     **/
     inline bool getRelativeMouseMode() const
     {
       return SDL_GetWindowRelativeMouseMode(*this);
@@ -627,7 +632,10 @@ namespace bq::sdl
     {
       return SDL_GetWindowSize(*this, a_Width, a_Height);
     };
-    /** @todo REMOVE? */
+
+    /** @brief Get the width of the window
+     * @see https://wiki.libsdl.org/SDL3/SDL_GetWindowSize
+     */
     inline int getWidth()
     {
       int w{0};
@@ -638,7 +646,9 @@ namespace bq::sdl
       }
       return w;
     };
-    /** @todo REMOVE? */
+    /** @brief Get the height of the window 
+     * @see https://wiki.libsdl.org/SDL3/SDL_GetWindowSize 
+    */
     inline int getHeight()
     {
       int h{0};
@@ -649,7 +659,6 @@ namespace bq::sdl
       }
       return h;
     };
-    /** @todo document me */
     /** @see https://wiki.libsdl.org/SDL3/SDL_GetWindowSizeInPixels
      * @brief Get the size of the window in pixels
      * @param a_Width int pointer where the width will be written
@@ -703,51 +712,80 @@ namespace bq::sdl
     {
       return SDL_SetWindowAlwaysOnTop(*this, a_OnTop);
     };
-    /** @todo document me */
+    /** @brief Set aspect ratio of window
+     * @param a_MinAspect
+     * @param a_MaxAspect
+     * @returns true on success
+     * @see https://wiki.libsdl.org/SDL3/SDL_SetWindowAspectRatio
+     */
     inline bool setAspectRatio(float a_MinAspect, float a_MaxAspect)
     {
       return SDL_SetWindowAspectRatio(*this, a_MinAspect, a_MaxAspect);
     };
-    /** @todo document me */
+    /** @brief Enable or disable the window border
+     * @param a_Bordered true to enable, false to disable. 
+     * @returns true on success
+     * @see https://wiki.libsdl.org/SDL3/SDL_SetWindowBordered
+    */
     inline bool setBordered(bool a_Bordered)
     {
       return SDL_SetWindowBordered(*this, a_Bordered);
     };
-    /** @todo document me */
+    /** @brief Enable or disable focusing of the window
+     * @param a_Focusable  true to enable, false to disable.
+     * @returns true on success
+     */
     inline bool setFocusable(bool a_Focusable)
     {
       return SDL_SetWindowFocusable(*this, a_Focusable);
     };
-    /** @todo document me */
+    /** @brief Enable or disable window fullscreen
+     * @param a_Fullscreen true to set fullscreen, false to restore from fullscreen.
+     * @returns true on success
+     */
     inline bool setFullscreen(bool a_Fullscreen)
     {
       return SDL_SetWindowFullscreen(*this, a_Fullscreen);
     };
-    /** @todo document me @see
-     * https://wiki.libsdl.org/SDL3/SDL_SetWindowFullscreenMode */
+    /** @brief Set the fullscreen mode to use
+     * @param a_Mode an 'SDL_DisplayMode' to use for fullscreen window.
+     * @returns true on success
+     * @see https://wiki.libsdl.org/SDL3/SDL_SetWindowFullscreenMode */
     inline bool setFullscreenMode(const SDL_DisplayMode *a_Mode)
     {
       return SDL_SetWindowFullscreenMode(*this, a_Mode);
     };
-    /** @todo document me @see https://wiki.libsdl.org/SDL3/SDL_SetWindowHitTest
+    /** @brief Set function to use for window "hit tests"
+     * @param a_HitTest function to use for hit tests.
+     * @param a_UserData pointer that is passed to hit test function.
+     * @see https://wiki.libsdl.org/SDL3/SDL_SetWindowHitTest
      */
     inline bool setHitTest(SDL_HitTest a_HitTest, void *a_UserData)
     {
       return SDL_SetWindowHitTest(*this, a_HitTest, a_UserData);
     };
-    /** @todo document me @see https://wiki.libsdl.org/SDL3/SDL_SetWindowIcon */
+    /** @brief Set the icon to associate with this window
+     * @param a_Icon an 'SDL_Surface' to use as this window's icon.
+     * @returns true on success
+     * @see https://wiki.libsdl.org/SDL3/SDL_SetWindowIcon */
     inline bool setIcon(SDL_Surface *a_Icon)
     {
       return SDL_SetWindowIcon(*this, a_Icon);
     };
-    /** @todo document me @see
-     * https://wiki.libsdl.org/SDL3/SDL_SetWindowKeyboardGrab */
+    /** @brief Enable or disable "Keyboard Grab"
+     * @param a_Grabbed true to enable, false to disable
+     * @returns true on success
+     * @see https://wiki.libsdl.org/SDL3/SDL_SetWindowKeyboardGrab */
     inline bool setKeyboardGrab(bool a_Grabbed)
     {
       return SDL_SetWindowKeyboardGrab(*this, a_Grabbed);
     };
-    /** @todo document me @see
-     * https://wiki.libsdl.org/SDL3/SDL_SetWindowMaximumSize */
+    /** @see https://wiki.libsdl.org/SDL3/SDL_SetWindowMaximumSize 
+     * @brief Set the maximum size of this window
+     * @param a_Width maximum width allowed
+     * @param a_Height maximum height allowed
+     * @returns true on success
+    */
     inline bool setMaximumSize(int a_Width, int a_Height)
     {
       return SDL_SetWindowMaximumSize(*this, a_Width, a_Height);
@@ -767,58 +805,82 @@ namespace bq::sdl
       }
       return SDL_SetWindowModal(*this, a_Modal);
     };
-    /** @todo document me @see
-     * https://wiki.libsdl.org/SDL3/SDL_SetWindowMinimumSize */
+    /** @brief Set window minimum size
+     * @param a_Width minimum allowable width
+     * @param a_Height minimum allowable height
+     * @returns true on success 
+     * @see https://wiki.libsdl.org/SDL3/SDL_SetWindowMinimumSize */
     inline bool setMinimumSize(int a_Width, int a_Height)
     {
       return SDL_SetWindowMinimumSize(*this, a_Width, a_Height);
     };
-    /** @todo document me @see
-     * https://wiki.libsdl.org/SDL3/SDL_SetWindowMouseGrab
+    /** @see https://wiki.libsdl.org/SDL3/SDL_SetWindowMouseGrab
+     * @brief Enable or disable mouse grabbing
+     * @param a_Grabbed true to enable, false to disable
+     * @returns true on success
      */
     inline bool setMouseGrab(bool a_Grabbed)
     {
       return SDL_SetWindowMouseGrab(*this, a_Grabbed);
     };
-    /** @todo document me @see
-     * https://wiki.libsdl.org/SDL3/SDL_SetWindowMouseRect
+    /** @brief Set the rectangle within this window that the mouse may travel within
+     * @param a_Rect an 'SDL_Rect' pointer to use, nullptr to disable.
+     * @returns true on success
+     * @see https://wiki.libsdl.org/SDL3/SDL_SetWindowMouseRect
      */
     inline bool setMouseRect(const SDL_Rect *a_Rect)
     {
       return SDL_SetWindowMouseRect(*this, a_Rect);
     };
-    /** @todo document me @see https://wiki.libsdl.org/SDL3/SDL_SetWindowOpacity
+    /** @brief Set the window opacity
+     * @param a_Opacity 1.0f is fully opaque, 0.0f is fully transparent. 
+     * @returns true on success
+     * @see https://wiki.libsdl.org/SDL3/SDL_SetWindowOpacity
      */
     inline bool setOpacity(float a_Opacity)
     {
       return SDL_SetWindowOpacity(*this, a_Opacity);
     };
-    /** @todo document me @see https://wiki.libsdl.org/SDL3/SDL_SetWindowParent
+    /** @brief Set this window as a child of another window
+     * @param a_Parent the new parent of this window.
+     * @returns true on success
+     *  @see https://wiki.libsdl.org/SDL3/SDL_SetWindowParent
      */
     inline bool setParent(SDL_Window *a_Parent)
     {
       return SDL_SetWindowParent(*this, a_Parent);
     };
-    /** @todo document me @see
-     * https://wiki.libsdl.org/SDL3/SDL_SetWindowPosition
+    /** @todo Set the position of this window
+     * @param a_X new X position
+     * @param a_Y new Y position
+     * @returns true on success
+     * @see https://wiki.libsdl.org/SDL3/SDL_SetWindowPosition
      */
     inline bool setPosition(int a_X, int a_Y)
     {
       return SDL_SetWindowPosition(*this, a_X, a_Y);
     };
-    /** @todo document me @see
-     * https://wiki.libsdl.org/SDL3/SDL_SetWindowResizable
+    /** @see https://wiki.libsdl.org/SDL3/SDL_SetWindowResizable
+     * @brief Enable or disable resizing of the window
+     * @param a_Resizable true to enable, false to disable. 
+     * @returns true on success
      */
     inline bool setResizable(bool a_Resizable)
     {
       return SDL_SetWindowResizable(*this, a_Resizable);
     };
-    /** @todo document me **/
+    /** @see https://wiki.libsdl.org/SDL3/SDL_SetWindowRelativeMouseMode 
+     * @brief enable or disable relative mouse mode
+     * @param a_Enabled true to enable, false to disable
+     * @returns true on success
+     * **/
     inline bool setRelativeMouseMode(bool a_Enabled)
     {
       return SDL_SetWindowRelativeMouseMode(*this, a_Enabled);
     };
-    /** @todo document me @see https://wiki.libsdl.org/SDL3/SDL_SetWindowShape
+    /** @brief Set the shape of the window
+     * @param a_Shape 'SDL_Surface' to use the Alpha Channel that will define the shape of the function. 
+     * @see https://wiki.libsdl.org/SDL3/SDL_SetWindowShape
      */
     inline bool setShape(SDL_Surface *a_Shape)
     {
